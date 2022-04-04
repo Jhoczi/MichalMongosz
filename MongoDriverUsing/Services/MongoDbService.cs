@@ -1,17 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDriverUsing.Models;
 
 namespace MongoDriverUsing.Services;
 
-public interface IMongoDbService<T> where T: class
-{
-    Task<IEnumerable<T>> GetAll();
-    Task<T> Get(string id);
-    Task Add(T item);
-    Task<bool> Remove(string id);
-    Task<bool> Update(string id, T item);
-}
 
 // generate interface for crud operations on user
 public interface IUserService
@@ -21,19 +14,23 @@ public interface IUserService
     Task Add(User item);
     Task<bool> Remove(string id);
     Task<bool> Update(string id, User item);
+    Task MongoFilteredAsBsonDocument();
 }
 
 public class MongoDbService : IUserService
 {
     private readonly IMongoCollection<User> _collection;
+    private readonly IMongoDatabase _database;
 
-    public MongoDbService(IOptions<MongoDbSettings> mongoDbSettings)
+    public MongoDbService(IMongoDbConfiguration mongoDbSettings)
     {
-        MongoClient client = new MongoClient(mongoDbSettings.Value.ConnectionString);
-        IMongoDatabase database = client.GetDatabase(mongoDbSettings.Value.DatabaseName);
-        _collection = database.GetCollection<User>(mongoDbSettings.Value.CollectionName);
+        MongoClient client = new MongoClient(mongoDbSettings.ConnectionString);
+        _database = client.GetDatabase(mongoDbSettings.DatabaseName);
+        _collection = _database.GetCollection<User>("users");
     }
 
+    
+    
     // public async Task<List<User>> GetAllAsync() =>
     //     await _collection.Find(user => true).ToListAsync();
     // public async Task<User> GetAsync(string id) =>
@@ -77,5 +74,31 @@ public class MongoDbService : IUserService
     {
         var result = await _collection.ReplaceOneAsync(user => user.Id == id, item);
         return result.IsAcknowledged && result.ModifiedCount > 0;
+    }
+
+    public async Task MongoFilteredAsBsonDocument()
+    {
+        var colectionAsBsonDocument = _database.GetCollection<BsonDocument>("new_users");
+        var filter = new BsonDocument("name", "Bill");
+        var filteredPeople = await colectionAsBsonDocument.Find(filter).ToListAsync();
+        foreach (var person in filteredPeople)
+        {
+            Console.WriteLine(person);
+        }
+
+        var newFilter =
+            new BsonDocument("$or",
+                new BsonArray()
+                {
+                    new BsonDocument("Age", new BsonDocument("$gt", 32)),
+                    new BsonDocument("Name", "Bill")
+                });
+
+        var filteredPeople2 = await colectionAsBsonDocument.Find(newFilter).ToListAsync();
+       Console.WriteLine("===============================");
+       foreach (var person in filteredPeople2)
+       {
+           Console.WriteLine($"New result: {person}");
+       }
     }
 }

@@ -1,0 +1,59 @@
+[
+  {
+    "_id": {"$oid": "62404d7868e1fd67bb82b648"},
+    "jezyki": ["angielski", "francuski", "rosyjski", "niemiecki"],
+    "name": "Dominik",
+    "wiek": 24
+  },
+  {
+    "_id": 55555,
+    "jezyki": ["en", "fr", "ru", "de"],
+    "name": "Dominik",
+    "wiek": 25
+  },
+  {
+    "_id": {"$oid": "62404fa568e1fd67bb82b64c"},
+    "name": "Bob",
+    "age": 26,
+    "languages": ["english", "french"]
+  },
+  {
+    "_id": {"$oid": "62404fa568e1fd67bb82b64d"},
+    "name": "Alice",
+    "age": 31,
+    "languages": ["german", "english"]
+  },
+  {
+    "_id": {"$oid": "62409e007b3586644173f2a5"},
+    "name": "Bill",
+    "age": 32,
+    "languages": ["english", "french"]
+  },
+  {
+    "_id": {"$oid": "6240a31dfc92b8523d39b9f9"},
+    "name": "Alicja",
+    "age": 31,
+    "languages": ["english", "french"]
+  },
+  {
+    "_id": {"$oid": "6240a31dfc92b8523d39b9fa"},
+    "name": "Lena",
+    "age": 29,
+    "languages": ["english", "spanish"]
+  },
+  {
+    "_id": {"$oid": "6240a31dfc92b8523d39b9fb"},
+    "name": "Kate",
+    "age": 30,
+    "languages": ["german", "russian"]
+  },
+  {
+    "_id": {"$oid": "6240aa387b3586644173f2a8"},
+    "name": "Alex",
+    "age": 28,
+    "company": {
+      "name": "microsoft",
+      "country": "Usa"
+    }
+  }
+]
