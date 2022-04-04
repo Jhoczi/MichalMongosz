@@ -22,6 +22,6 @@ public class Worker
     {
         _logger.LogInformation("Hello World!");
         var result = await _userService.GetAll();
-        Console.WriteLine(result.ElementAt(0).Name);
+        Console.WriteLine($"User first name: {result.ElementAt(0).Name}");
     }
 }
